@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -76,12 +78,11 @@ class _TopBar extends StatelessWidget {
           AgentBadge(activeAgentType: activeAgent),
           const Spacer(),
           GestureDetector(
-            onTap: () => HapticFeedback.lightImpact(),
-            child: Icon(
-              Icons.memory_outlined,
-              color: isMemoryActive ? AppColors.apexPurple : AppColors.textSecondary,
-              size: 22,
-            ),
+            onTap: () {
+              HapticFeedback.lightImpact();
+              context.push(AppRoutes.memory);
+            },
+            child: MemoryIndicator(isActive: isMemoryActive),
           ),
           const SizedBox(width: AppSpacing.p8),
           GestureDetector(

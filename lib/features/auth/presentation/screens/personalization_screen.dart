@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/storage/hive_service.dart';
+import '../../../../core/router/app_router.dart';
+import '../../chat/domain/chat_provider.dart';
 
 enum UseCase { work, study, creative, dev }
 enum ResponseStyle { concise, detailed, bullet, conversational }
 
-class PersonalizationScreen extends StatefulWidget {
+class PersonalizationScreen extends ConsumerStatefulWidget {
   const PersonalizationScreen({super.key});
 
   @override
-  State<PersonalizationScreen> createState() => _PersonalizationScreenState();
+  ConsumerState<PersonalizationScreen> createState() => _PersonalizationScreenState();
 }
 
-class _PersonalizationScreenState extends State<PersonalizationScreen> {
+class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
   final TextEditingController _nameController = TextEditingController();
   UseCase _selectedUseCase = UseCase.work;
   ResponseStyle _selectedStyle = ResponseStyle.conversational;
@@ -42,12 +47,12 @@ class _PersonalizationScreenState extends State<PersonalizationScreen> {
     setState(() => _isSaving = true);
 
     try {
-      // Save to Hive locally — will be wired in Phase 6
-      // await HiveService.saveUserPrefs(
-      //   name: _nameController.text,
-      //   useCase: _selectedUseCase.name,
-      //   style: _selectedStyle.name,
-      // );
+      // Save name to Hive
+      final name = _nameController.text.trim();
+      final hive = ref.read(hiveServiceProvider);
+      await hive.saveUserName(name.isEmpty ? 'Friend' : name);
+      await hive.setHasSeenOnboarding(true);
+
       await Future.delayed(const Duration(milliseconds: 500));
 
       // Navigate to the main chat screen (GoRouter will handle this with auth state)

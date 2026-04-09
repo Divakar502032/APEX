@@ -81,4 +81,21 @@ class ApiService {
       rethrow;
     }
   }
+
+  Future<Map<String, dynamic>> getMemories(String userId) async {
+    try {
+      final response = await _dio.get('/memory/$userId');
+      return response.data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteMemory(String userId, String memoryId) async {
+    try {
+      await _dio.delete('/memory/$userId/$memoryId');
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
