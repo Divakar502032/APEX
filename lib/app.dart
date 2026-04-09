@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/theme/app_theme.dart';
+import 'core/router/app_router.dart';
 
 class ApexApp extends ConsumerWidget {
   const ApexApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // We will hook up the GoRouter here shortly
-    return MaterialApp(
+    final router = ref.watch(routerProvider);
+
+    return MaterialApp.router(
       title: 'APEX AI',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: const Scaffold(
-        body: Center(
-          child: Text('APEX AI Initialized'),
-        ),
-      ),
+      routerConfig: router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
