@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
+import '../../features/chat/presentation/screens/chat_screen.dart';
 
 // Route names — use these constants everywhere, not raw strings
 class AppRoutes {
@@ -23,11 +24,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingScreen(),
       ),
-      // Remaining routes will be wired in Phase 3+
+      GoRoute(
+        path: AppRoutes.chat,
+        builder: (context, state) => const ChatScreen(),
+      ),
     ],
     redirect: (context, state) {
-      // Auth gate will go here — unauthenticated → onboarding, authenticated → chat
-      // Will be implemented when Firebase Auth is configured (Phase 2b)
+      // Auth gate will be implemented when Firebase Auth is configured
       return null;
     },
   );
